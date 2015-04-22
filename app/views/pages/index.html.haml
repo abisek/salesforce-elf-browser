@@ -1,2 +1,9 @@
 %h1 Event Log File Browser
 %p A Salesforce connected web app to access and download Event Log Files
+
+
+%div
+  %div
+    = link_to "Production Login", omniauth_login_path(:salesforce)
+  %div
+    = link_to "Sandbox Login", omniauth_login_path(:salesforcesandbox)

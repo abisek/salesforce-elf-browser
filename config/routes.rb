@@ -5,6 +5,15 @@ Rails.application.routes.draw do
   # You can have the root of your site routed with "root"
   root 'pages#index'
 
+  # Salesforce OAuth callbacks
+  get '/auth/salesforce/callback' => 'sessions#create'
+  get '/auth/salesforcesandbox/callback' => 'sessions#create'
+
+  get '/logout' => 'sessions#destroy', as: :logout
+
+  # Resources
+  resources :event_log_files, only: [:index]
+
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
 
