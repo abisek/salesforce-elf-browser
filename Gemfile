@@ -15,6 +15,10 @@ gem 'coffee-rails', '~> 4.1.0'
 # HAML templating engine
 gem 'haml-rails', '~> 0.9'
 
+# UI related
+gem 'bootstrap-sass', '~> 3.3.4'
+
+
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks

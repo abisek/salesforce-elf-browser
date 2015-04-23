@@ -1,0 +1,14 @@
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "bootstrap-sprockets";
+@import "bootstrap";
+
+
+body {
+  padding-top: 50px;
+}
+
+// Overrider for placing navbar logo
+.navbar-brand {
+  padding: 0px;
+  padding-top: 5px;
+}

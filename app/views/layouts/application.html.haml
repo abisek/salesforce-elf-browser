@@ -1,9 +1,36 @@
 !!!
 %html
-    %head
-        %title ElfBrowser
-        = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
-        = javascript_include_tag 'application', 'data-turbolinks-track' => true
-        = csrf_meta_tags
-    %body
-        = yield
+  %head
+    %title ElfBrowser
+    = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
+    = javascript_include_tag 'application', 'data-turbolinks-track' => true
+    = csrf_meta_tags
+  %body
+    .navbar.navbar-inverse.navbar-fixed-top
+      .container
+        .navbar-header
+          -# Uncomment the following lines when navbar menu items are inserted.
+          -#%button.navbar-toggle{"data-target" => ".navbar-collapse", "data-toggle" => "collapse", :type => "button"}
+          -#  %span.icon-bar
+          -#  %span.icon-bar
+          -#  %span.icon-bar
+          %a.navbar-brand{:href => "#"}
+            %span
+              = image_tag 'sfdc_logo.png', alt: 'Salesforce Logo'
+
+            Event Log File Browser
+        -# Uncomment the following four lines for navbar menu items.
+        -#.collapse.navbar-collapse
+        -#  %ul.nav.navbar-nav
+        -#    %li.active
+        -#      %a{:href => "#"} Home
+
+        //.nav-collapse
+    .container
+      = yield
+
+    #footer
+      .container
+        %hr
+        %p.text-muted
+          Salesforce.com, inc. The Landmark at One Market, Suite 300, San Francisco, CA, 94105, United States
