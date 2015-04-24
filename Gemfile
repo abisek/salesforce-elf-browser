@@ -36,6 +36,7 @@ gem 'puma'
 
 # 3rd Party Services
 gem 'omniauth-salesforce'
+gem 'databasedotcom'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development

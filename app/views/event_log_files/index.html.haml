@@ -1,7 +1,20 @@
-%div Event Log Files
-
-%div
-  Logged in as
-  = @username
-
 = link_to "Logout", logout_path
+
+%table.table.table-striped.table-bordered.table-hover
+  %thead
+    %tr
+      %th Id
+      %th Log Date
+      %th Event Type
+      %th Log Size (in bytes)
+  %tbody.elf-table-entries
+    - @log_files.each do |log_file|
+      %tr
+        %td
+          = log_file.Id
+        %td
+          = log_file.LogDate.strftime("%Y-%m-%d")
+        %td
+          = log_file.EventType
+        %td.text-right
+          = number_with_delimiter(log_file.LogFileLength, delimiter: ",")
