@@ -5,7 +5,7 @@ class EventLogFilesController < ApplicationController
   before_filter :setup_client
 
   def index
-    redirect_to root_path unless session[:token]
+    redirect_to root_path unless logged_in?
 
     @username = session[:username]
 
