@@ -53,6 +53,15 @@ class EventLogFilesController < ApplicationController
     end
   end
 
+  def show
+    elf_info = @client.find("EventLogFile", params[:id])
+    elf_file = @client.http_get(elf_info.LogFile)
+
+    # Todo handle session expiration and resource not found
+
+    send_data elf_file.body, type: 'text/csv'
+  end
+
   private
   def setup_client
     @client = Databasedotcom::Client.new

@@ -12,7 +12,7 @@ Rails.application.routes.draw do
   get '/logout' => 'sessions#destroy', as: :logout
 
   # Resources
-  resources :event_log_files, only: [:index]
+  resources :event_log_files, only: [:index, :show]
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
