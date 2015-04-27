@@ -17,6 +17,8 @@ gem 'haml-rails', '~> 0.9'
 
 # UI related
 gem 'bootstrap-sass', '~> 3.3.4'
+gem 'momentjs-rails'
+gem 'bootstrap-daterangepicker-rails'
 
 
 # Use jquery as the JavaScript library

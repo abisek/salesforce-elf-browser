@@ -11,5 +11,6 @@
  * file per style scope.
  *
  *= require_tree .
+ *= require daterangepicker-bs3
  *= require_self
  */

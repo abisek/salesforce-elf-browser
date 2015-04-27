@@ -1,3 +1,35 @@
+.well
+  %form.form-inline{method: 'get', action: ''}
+    .form-group
+      %label{for: 'daterange'}
+        Date Range
+      %input#daterange.form-control{type: "text", size: 24, name: 'daterange', value: "#{@start_date} to #{@end_date}"}
+
+    .form-group
+      %label
+        Event Type
+      = select_tag('eventtype', options_for_select(@event_types, @event_type), class: 'form-control')
+    %button.btn.btn-primary{type: 'submit'}
+      Apply
+
+
+:javascript
+  $(document).ready(function() {
+    $('#daterange').daterangepicker({
+      format: 'YYYY-MM-DD',
+      startDate: moment("#{@start_date}"),
+      endDate: moment("#{@end_date}"),
+      ranges: {
+         'Today': [moment(), moment()],
+         'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+         'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+         'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+         'This Month': [moment().startOf('month'), moment().endOf('month')]
+        },
+      separator: ' to '
+    });
+  });
+
 %table.table.table-striped.table-bordered.table-hover
   %thead
     %tr
