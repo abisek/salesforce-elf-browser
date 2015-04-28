@@ -55,18 +55,26 @@ class EventLogFilesController < ApplicationController
 
   def show
     elf_info = @client.find("EventLogFile", params[:id])
-    elf_file = @client.http_get(elf_info.LogFile)
 
     # Todo handle session expiration and resource not found
-
-    send_data elf_file.body, type: 'text/csv', filename: "#{elf_info.LogDate.to_date}_#{elf_info.EventType}.csv"
+    if (params[:script])
+      @log_files = [elf_info]
+      # @shell_escaped_token = Shellwords.escape(@token)
+      response.headers["Content-Disposition"] = "attachment; filename=#{elf_info.LogDate.to_date}_#{elf_info.EventType}.sh"
+      render 'event_log_files/download_script.sh.erb', layout: false, content_type: 'text/plain'
+    else
+      elf_file = @client.http_get(elf_info.LogFile)
+      send_data elf_file.body, type: 'text/csv', filename: "#{elf_info.LogDate.to_date}_#{elf_info.EventType}.csv"
+    end
   end
 
   private
   def setup_client
     @client = Databasedotcom::Client.new
     @client.version = API_VERSION
-    @client.authenticate token: session[:token], instance_url: session[:instance_url]
+    @instance_url = session[:instance_url]
+    @token = session[:token]
+    @client.authenticate token: @token, instance_url: @instance_url
   end
 
   # return [start_date, end_date] from a query string (e.g. "2015-01-01 to 2015-01-02"). Returned dates are of Date class.
