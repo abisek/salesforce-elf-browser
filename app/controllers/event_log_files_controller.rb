@@ -59,7 +59,7 @@ class EventLogFilesController < ApplicationController
 
     # Todo handle session expiration and resource not found
 
-    send_data elf_file.body, type: 'text/csv'
+    send_data elf_file.body, type: 'text/csv', filename: "#{elf_info.LogDate.to_date}_#{elf_info.EventType}.csv"
   end
 
   private
