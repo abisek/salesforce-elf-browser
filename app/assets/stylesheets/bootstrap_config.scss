@@ -15,3 +15,8 @@
 .form-inline > * {
   margin-right: 10px;
 }
+
+// Allow tooltip on disabled buttons
+.btn.disabled {
+  pointer-events: auto;
+}

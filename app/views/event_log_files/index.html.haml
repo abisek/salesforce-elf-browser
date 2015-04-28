@@ -48,7 +48,11 @@
         %td
           = log_file.EventType
         %td.text-right
-          = number_with_delimiter(log_file.LogFileLength, delimiter: ",")
+          = number_with_delimiter(log_file.LogFileLength)
         %td.text-center
-          = link_to(event_log_file_path(log_file.Id)) do
-            %span.glyphicon.glyphicon-download-alt
+          -if log_file.LogFileLength <= Rails.configuration.x.elf.max_download_file_size_in_bytes
+            = link_to(event_log_file_path(log_file.Id), "data-toggle" => "tooltip", title: "Download event log file", class: "btn btn-success btn-xs") do
+              %span.glyphicon.glyphicon-download-alt
+          - else
+            = link_to(event_log_file_path(log_file.Id), "data-toggle" => "tooltip", title: "Files over #{number_with_delimiter(Rails.configuration.x.elf.max_download_file_size_in_bytes)} bytes cannot be downloaded from ELF Browser", class: "btn btn-warning btn-xs disabled") do
+              %span.glyphicon.glyphicon-download-alt
