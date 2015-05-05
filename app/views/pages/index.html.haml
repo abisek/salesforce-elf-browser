@@ -1,5 +1,15 @@
 %h2 A Salesforce connected web app to access and download Event Log Files
 
+- flash.each do |type, value|
+  - if type == "errors" && !value.nil? && !value.empty?
+    .alert.alert-danger.alert-dismissible.fade.in{:role => "alert"}
+      %button.close{"data-dismiss" => "alert", :type => "button"}
+        %span ×
+      %ul
+      - value.each do |error_message|
+        %li
+          = error_message
+
 %div
   = link_to "Production Login", omniauth_login_path(:salesforce), class: 'btn btn-primary'
   = link_to "Sandbox Login", omniauth_login_path(:salesforcesandbox), class: 'btn btn-success'

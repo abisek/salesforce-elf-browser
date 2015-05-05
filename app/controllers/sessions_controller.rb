@@ -10,7 +10,16 @@ class SessionsController < ApplicationController
 
     session[:username] = auth_hash["extra"]["username"]
 
-    redirect_to event_log_files_path
+    setup_databasedotcom_client
+
+    # Check if user has access to Event Log Files. If not logout and notify the user.
+    if @client.list_sobjects.include? "EventLogFile"
+      redirect_to event_log_files_path
+    else
+      reset_session
+      flash_message(:errors, "We're sorry, but you don't have access to Event Log Files. Please see your administrator.")
+      redirect_to root_path
+    end
   end
 
   def destroy

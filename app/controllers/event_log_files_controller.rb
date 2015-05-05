@@ -6,9 +6,7 @@ class EventLogFilesController < ApplicationController
                    Login LoginAs Logout MetadataApiOperation MultiBlockReport PackageInstall Report ReportExport\
                    RestApi Sandbox Sites TimeBasedWorkflow UITracking URI VisualforceRequest)
 
-  API_VERSION = "32.0"
-
-  before_filter :setup_client
+  before_filter :setup_databasedotcom_client
 
   def index
     redirect_to root_path unless logged_in?
@@ -77,14 +75,6 @@ class EventLogFilesController < ApplicationController
   end
 
   private
-  def setup_client
-    @client = Databasedotcom::Client.new
-    @client.version = API_VERSION
-    @instance_url = session[:instance_url]
-    @token = session[:token]
-    @client.authenticate token: @token, instance_url: @instance_url
-  end
-
   # return [start_date, end_date] from a query string (e.g. "2015-01-01 to 2015-01-02"). Returned dates are of Date class.
   def date_range_parser(query_string)
     begin
