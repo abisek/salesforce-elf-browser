@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title ElfBrowser
+    %title Salesforce Event Log File Browser
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
@@ -13,10 +13,10 @@
             %span.icon-bar
             %span.icon-bar
             %span.icon-bar
-          %a.navbar-brand{href: "#"}
+          = link_to(root_path, class: "navbar-brand") do
             %span
               = image_tag 'sfdc_logo.png', alt: 'Salesforce Logo'
-            Salesforce Event Log File Browser
+            Event Log File Browser
         .collapse.navbar-collapse
           - if logged_in?
             .nav.navbar-nav.navbar-right
