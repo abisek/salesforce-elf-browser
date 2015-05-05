@@ -19,7 +19,8 @@ module ElfBrowser
     config.middleware.use Rack::Deflater
 
     # Maximum file size that can be downloaded via event log files
-    config.x.elf.max_download_file_size_in_bytes = Float(ENV['ELF_MAX_DOWNLOAD_FILE_SIZE_IN_BYTES'] || 5_000_000)
+    config.x.elf.max_download_file_size_in_bytes = Float(ENV['ELF_MAX_DOWNLOAD_FILE_SIZE_IN_BYTES'] || 5_000)
+    config.x.elf.google_analytics_tracking_id = ENV['ELF_GOOGLE_ANALYTICS_TRACKING_ID']
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration should go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded.
