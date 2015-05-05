@@ -8,6 +8,7 @@ Rails.application.routes.draw do
   # Salesforce OAuth callbacks
   get '/auth/salesforce/callback' => 'sessions#create'
   get '/auth/salesforcesandbox/callback' => 'sessions#create'
+  get '/auth/failure' => 'sessions#failure'
 
   get '/logout' => 'sessions#destroy', as: :logout
 

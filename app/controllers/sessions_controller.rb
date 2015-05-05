@@ -26,4 +26,10 @@ class SessionsController < ApplicationController
     reset_session
     redirect_to root_path
   end
+
+  def failure
+    reset_session
+    flash_message(:errors, "OAuth2 login failed. Reason: #{params[:message]}")
+    redirect_to root_path
+  end
 end
