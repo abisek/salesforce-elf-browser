@@ -1,7 +1,7 @@
 .alert.alert-danger
   %div
     = "Files over #{number_with_delimiter(Rails.configuration.x.elf.max_download_file_size_in_bytes)} bytes cannot be downloaded from ELF Browser. Try cURL download shell script instead."
-= link_to(event_log_file_path(@elf_info.Id, script: 1), "data-toggle" => "tooltip", title: "Event log file cURL download shell script", class: "btn btn-info") do
+= link_to(event_log_file_path(@elf_info.Id, script: 1), "data-toggle" => "tooltip", title: "Download event log file with cURL shell script", class: "btn btn-info") do
   %span.glyphicon.glyphicon-file
   Download Script
 &nbsp;

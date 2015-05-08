@@ -18,11 +18,11 @@ class EventLogFilesController < ApplicationController
       default_params_redirect
       return
     elsif params[:daterange].nil? || params[:daterange].empty?
-      flash_message(:warnings, "The 'daterange' query parameter is invalid. Setting default query parameters.")
+      flash_message(:warnings, "The 'daterange' query parameter is invalid. Displaying default date range.")
       default_params_redirect
       return
     elsif params[:eventtype].nil? || params[:eventtype].empty?
-      flash_message(:warnings, "The 'eventtype' query parameter is invalid. Setting default query parameters.")
+      flash_message(:warnings, "The 'eventtype' query parameter is invalid. Displaying all event types.")
       default_params_redirect
       return
     end
@@ -30,7 +30,7 @@ class EventLogFilesController < ApplicationController
     @event_type = @event_types.find { |event_type| event_type.downcase == params[:eventtype].downcase }
 
     if @event_type.nil?
-      flash_message(:warnings, "The 'eventtype' query parameter with value '#{params[:eventtype]}' is invalid. Setting default query parameters.")
+      flash_message(:warnings, "The 'eventtype' query parameter with value '#{params[:eventtype]}' is invalid. Displaying all event types.")
       default_params_redirect
       return
     end
@@ -38,7 +38,7 @@ class EventLogFilesController < ApplicationController
     begin
       @start_date, @end_date = date_range_parser(params[:daterange])
     rescue ArgumentError => e
-      flash_message(:warnings, "The 'daterange' query parameter with value '#{params[:daterange]}' is invalid. Setting default query parameters.")
+      flash_message(:warnings, "The 'daterange' query parameter with value '#{params[:daterange]}' is invalid. Displaying default date range.")
       default_params_redirect
       return
     end
