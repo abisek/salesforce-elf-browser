@@ -1,4 +1,5 @@
 class EventLogFilesController < ApplicationController
+  include ActionController::Live
 
   ALL_EVENTS_TYPE = "All"
   EVENT_TYPES = %w(API ApexCallout ApexExecution ApexSoap ApexTrigger AsyncReportRun BulkApi ChangeSetOperation\
@@ -85,8 +86,20 @@ class EventLogFilesController < ApplicationController
         render 'event_log_files/large_file', status: :bad_request
         return
       else
-        elf_file = @client.http_get(@elf_info.LogFile)
-        send_data elf_file.body, type: 'text/csv', filename: "#{@elf_info.LogDate.to_date}_#{@elf_info.EventType}.csv"
+        # Stream the file download
+        response.headers['Content-Type'] = 'text/csv'
+        response.headers['Content-Disposition'] = "attachment; filename=\"#{@elf_info.LogDate.to_date}_#{@elf_info.EventType}.csv\""
+
+        begin
+          @client.http_streaming_get(@elf_info.LogFile, response.stream)
+        rescue Databasedotcom::SalesForceError => e
+          response.headers.delete('Content-Type')
+          response.headers.delete('Content-Disposition')
+          @error_message = e.message
+          render 'event_log_files/error', status: :bad_request
+        else
+          response.stream.close
+        end
         return
       end
     end
