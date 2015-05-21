@@ -2,12 +2,6 @@
 @import "bootstrap-sprockets";
 @import "bootstrap";
 
-// Overrider for placing navbar logo
-.navbar-brand {
-  padding: 0px;
-  padding-top: 5px;
-}
-
 .elf-table-entries {
   font-family: $font-family-monospace;
 }

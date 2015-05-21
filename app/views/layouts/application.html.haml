@@ -16,8 +16,7 @@
             %span.icon-bar
           = link_to(root_path, class: "navbar-brand") do
             %span
-              = image_tag 'sfdc_logo.png', alt: 'Salesforce Logo'
-            Event Log File Browser
+            Salesforce Event Log File Browser
         .collapse.navbar-collapse
           - if logged_in?
             .nav.navbar-nav.navbar-right
@@ -36,5 +35,10 @@
     #footer
       .container
         %hr
-        %p.text-muted
-          Salesforce.com, inc. The Landmark at One Market, Suite 300, San Francisco, CA, 94105, United States
+        = link_to("Source Code","https://github.com/abisek/salesforce-elf-browser")
+        |
+        = link_to("Report Issues", "https://github.com/abisek/salesforce-elf-browser/issues")
+        |
+        Provided under
+        = link_to("MIT license.", "https://github.com/abisek/salesforce-elf-browser/blob/master/MIT-LICENSE")
+        Copyright (c) 2015 Abhishek Sreenivasa and contributors.
