@@ -1,6 +1,8 @@
 // "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
 @import "bootstrap-sprockets";
+@import "variables";
 @import "bootstrap";
+@import "bootswatch";
 
 .elf-table-entries {
   font-family: $font-family-monospace;
