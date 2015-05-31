@@ -5,7 +5,8 @@ class EventLogFilesController < ApplicationController
   EVENT_TYPES = %w(API ApexCallout ApexExecution ApexSoap ApexTrigger AsyncReportRun BulkApi ChangeSetOperation\
                    ContentDistribution ContentDocumentLink ContentTransfer Dashboard DocumentAttachmentDownloads\
                    Login LoginAs Logout MetadataApiOperation MultiBlockReport PackageInstall Report ReportExport\
-                   RestApi Sandbox Sites TimeBasedWorkflow UITracking URI VisualforceRequest)
+                   RestApi Sandbox Sites TimeBasedWorkflow UITracking URI VisualforceRequest)\
+                   .map! { |i| i.strip } # Clean the array to remove trailing '\n' character
 
   before_filter :setup_databasedotcom_client
 
