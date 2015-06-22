@@ -35,10 +35,13 @@
     #footer
       .container
         %hr
-        = link_to("Source Code","https://github.com/abisek/salesforce-elf-browser")
-        |
-        = link_to("Report Issues", "https://github.com/abisek/salesforce-elf-browser/issues")
-        |
-        Provided under
-        = link_to("MIT license.", "https://github.com/abisek/salesforce-elf-browser/blob/master/MIT-LICENSE")
-        Copyright (c) 2015 Salesforce ELF Browser contributors.
+        .div
+          = render 'layouts/github_buttons'
+        .div
+          = link_to("Source Code","https://github.com/abisek/salesforce-elf-browser")
+          |
+          = link_to("Report Issues", "https://github.com/abisek/salesforce-elf-browser/issues")
+          |
+          Provided under
+          = link_to("MIT license.", "https://github.com/abisek/salesforce-elf-browser/blob/master/MIT-LICENSE")
+          Copyright (c) 2015 Salesforce ELF Browser contributors.
