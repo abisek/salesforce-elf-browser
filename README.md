@@ -10,9 +10,13 @@ Event log file browser is a Salesforce connected app built with Ruby on Rails to
 
 ## Hosting your own instance of Salesforce Event Log File Browser
 
-Follow these steps if you wish to host your own instance of the application.
+### Heroku
+[![Deploy](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
 
-### Create Salesforce consumer key and secret
+### Other platforms
+Follow these steps if you wish to host your own instance of the application on any Rails hosting platform.
+
+#### Create Salesforce consumer key and secret
 This step can be performed from any Salesforce organization.
 
 1. Navigate to **Setup > Create > Apps > Connected Apps > New**
@@ -24,7 +28,7 @@ This step can be performed from any Salesforce organization.
 7. Repeat steps 1-6 for sandbox instance with a slight change in step 3 -- replace `.../auth/salesforce/callback` with `.../auth/salesforcesandbox/callback`
 8. Note your consumer key and secret and for both production and sandbox instances.
 
-### Configure and start Rails
+#### Configure and start Rails
 Configure the following environment variables.
 
 1. `SALESFORCE_ELF_CONSUMER_KEY`: (required) Salesforce consumer key for production from previous section.

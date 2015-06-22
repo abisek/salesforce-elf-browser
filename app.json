@@ -1,0 +1,38 @@
+{
+  "name": "Salesforce ELF Browser",
+  "description": "A Salesforce connected web app to access and download Event Log Files ",
+  "repository": "https://github.com/abisek/salesforce-elf-browser",
+  "keywords": ["salesforce", "sfdc", "elf", "event log file", "download", "script"],
+
+  "env": {
+    "SALESFORCE_ELF_CONSUMER_KEY": {
+      "description": "Salesforce consumer key for production",
+      "required": true
+    },
+    "SALESFORCE_ELF_CONSUMER_SECRET": {
+      "description": "Salesforce consumer secret for production",
+      "required": true
+    },
+    "SALESFORCE_ELF_SANDBOX_CONSUMER_KEY": {
+      "description": "Salesforce consumer key for sandbox",
+      "required": true
+    },
+    "SALESFORCE_ELF_SANDBOX_CONSUMER_SECRET": {
+      "description": "Salesforce consumer secret for sandbox",
+      "required": true
+    },
+    "SECRET_KEY_BASE": {
+      "description": "A secret key for verifying the integrity of signed cookies",
+      "required": true,
+      "generator": "secret"
+    },
+    "ELF_MAX_DOWNLOAD_FILE_SIZE_IN_BYTES": {
+      "description": "The maximum size of file allowed via streaming download. Default is 5_000_000 (~5MB).",
+      "required": false
+    },
+    "ELF_GOOGLE_ANALYTICS_TRACKING_ID": {
+      "description": "Google Analytics tracking ID",
+      "required": false
+    }
+  }
+}
