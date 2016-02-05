@@ -2,19 +2,17 @@ class EventLogFilesController < ApplicationController
   include ActionController::Live
 
   ALL_EVENTS_TYPE = "All"
-  EVENT_TYPES = %w(API ApexCallout ApexExecution ApexSoap ApexTrigger AsyncReportRun BulkApi ChangeSetOperation\
-                   ContentDistribution ContentDocumentLink ContentTransfer Dashboard DocumentAttachmentDownloads\
-                   Login LoginAs Logout MetadataApiOperation MultiBlockReport PackageInstall Report ReportExport\
-                   RestApi Sandbox Sites TimeBasedWorkflow UITracking URI VisualforceRequest)\
-                   .map! { |i| i.strip } # Clean the array to remove trailing '\n' character
-
+  
   before_filter :setup_databasedotcom_client
 
   def index
     redirect_to root_path unless logged_in?
 
     @username = session[:username]
-    @event_types = EVENT_TYPES.dup.unshift(ALL_EVENTS_TYPE)
+    if not session.has_key?("event_types")
+      session[:event_types] = get_event_types
+    end
+    @event_types = session["event_types"]
 
     if params[:daterange].nil? && params[:eventtype].nil?
       default_params_redirect
@@ -132,4 +130,18 @@ class EventLogFilesController < ApplicationController
   def date_to_time(date)
     date.to_time(:utc).to_formatted_s(:iso8601)
   end
+
+  # helper method to dynamically generate the valid event log file event types
+  def get_event_types
+    pick_list_values = []
+    fields = @client.describe_sobject("EventLogFile")["fields"]
+    for field in fields
+      if field["name"] == "EventType"
+         field["picklistValues"].each {|v| pick_list_values.push(v["value"])}
+        break
+      end
+    end
+    return pick_list_values.dup.unshift(ALL_EVENTS_TYPE)
+  end
+
 end
