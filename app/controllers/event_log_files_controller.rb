@@ -10,9 +10,7 @@ class EventLogFilesController < ApplicationController
 
     @username = session[:username]
 
-    unless metadata_cached?
-      load_and_cache_elf_metadata
-    end
+    load_and_cache_elf_metadata unless metadata_cached?
     @event_types = session["event_types"]
     @has_one_hr_elf = session["has_one_hr_elf"]
 
@@ -46,16 +44,21 @@ class EventLogFilesController < ApplicationController
     end
 
     begin
-      @select_clause = "SELECT Id, EventType, LogDate, LogFileLength"
-      @order_by_clause = "ORDER BY LogDate DESC, EventType"
-      if @has_one_hr_elf
-        @select_clause = "SELECT Id, EventType, LogDate, LogFileLength, Sequence, Interval"
-        @order_by_clause = "ORDER BY LogDate DESC, EventType, Sequence, Interval"
-      end
+      select_clause = if @has_one_hr_elf
+                        'SELECT Id, EventType, LogDate, LogFileLength, Sequence, Interval'
+                      else
+                        'SELECT Id, EventType, LogDate, LogFileLength'
+                      end
+
+      order_by_clause = if @has_one_hr_elf
+                          'ORDER BY LogDate DESC, EventType, Sequence, Interval'
+                        else
+                          'ORDER BY LogDate DESC, EventType'
+                        end
       if @event_type == ALL_EVENTS_TYPE
-        @log_files = @client.query("#{@select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} #{@order_by_clause}")
+        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} #{order_by_clause}")
       else
-        @log_files = @client.query("#{@select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' #{@order_by_clause}")
+        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' #{order_by_clause}")
       end
     rescue Databasedotcom::SalesForceError => e
       # Session has expired. Force user logout.
@@ -153,16 +156,16 @@ class EventLogFilesController < ApplicationController
 
   # helper method to identify whether an org has 1-hr ELF
   def one_hour_elf?(fields)
-    for field in fields
-      if field["name"] == "Interval" or field["name"] == "Sequence"
-        return "1"
+    fields.each do |field|
+      if field["name"] == "Sequence"
+        return true
       end
     end
-    return nil
+    return false
   end
 
   def metadata_cached?
-    session[:event_types] || session[:has_one_hr_elf]
+    session[:event_types] && session[:has_one_hr_elf]
   end
 
   def load_and_cache_elf_metadata
