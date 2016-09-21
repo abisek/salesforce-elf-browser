@@ -50,10 +50,12 @@ class EventLogFilesController < ApplicationController
       puts "END = #{params[:endTime]}"
       if @event_type == ALL_EVENTS_TYPE
 #        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
-        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND HOUR_IN_DAY(LogDate) < #{@startTime} AND HOUR_IN_DAY(LogDate) > #{@endTime} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
+#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND HOUR_IN_DAY(LogDate) < #{@startTime} AND HOUR_IN_DAY(LogDate) > #{@endTime} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
+         @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8")
       else
 #        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
-        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
+#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
+         @log_files = @client.query("SELECT logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8")
       end
     rescue Databasedotcom::SalesForceError => e
       # Session has expired. Force user logout.
@@ -129,7 +131,7 @@ class EventLogFilesController < ApplicationController
   end
 
   def default_params_redirect
-    redirect_to event_log_files_path(daterange: "#{default_date.to_s} to #{default_date.to_s}", eventtype: ALL_EVENTS_TYPE)
+    redirect_to event_log_files_path(daterange: "#{default_date.to_s} to #{default_date.to_s}", eventtype: ALL_EVENTS_TYPE, startTime: "8", endTime: "21")
   end
 
   # Helper method to transform date (e.g. 2015-01-01) to time in ISO8601 format (e.g. 2015-01-01T00:00:00.000Z)
