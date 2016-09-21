@@ -13,11 +13,11 @@ class SessionsController < ApplicationController
     setup_databasedotcom_client
 
     # Check if user has access to Event Log Files. If not logout and notify the user.
-    if @client.list_sobjects.include? "EventLogFile"
+    if @client.list_sobjects.include? "LoginHistory"
       redirect_to event_log_files_path
     else
       reset_session
-      flash_message(:errors, "We're sorry, but you don't have access to Event Log Files. Please see your administrator.")
+      flash_message(:errors, "We're sorry, but you don't have access to LoginHistory. Please see your administrator.")
       redirect_to root_path
     end
   end
