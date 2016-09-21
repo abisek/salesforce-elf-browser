@@ -69,7 +69,7 @@ class EventLogFilesController < ApplicationController
 
   def show
     begin
-      @elf_info = @client.find("EventLogFile", params[:id])
+      @elf_info = @client.find("LoginHistory", params[:id])
     rescue Databasedotcom::SalesForceError => e
       if e.message == "Session expired or invalid"
         redirect_to logout_path
