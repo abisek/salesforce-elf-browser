@@ -2,7 +2,7 @@ class EventLogFilesController < ApplicationController
   include ActionController::Live
 
   ALL_EVENTS_TYPE = "All"
-  
+
   before_filter :setup_databasedotcom_client
 
   def index
@@ -44,10 +44,18 @@ class EventLogFilesController < ApplicationController
     end
 
     begin
+      @startTime = params[:startTime]
+      @endTime = params[:endTime]
+      puts "START = #{params[:startTime]}"
+      puts "END = #{params[:endTime]}"
       if @event_type == ALL_EVENTS_TYPE
-        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
+#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
+#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND HOUR_IN_DAY(LogDate) < #{@startTime} AND HOUR_IN_DAY(LogDate) > #{@endTime} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
+#         @log_files = @client.query("SELECT Id, logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8")
       else
-        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
+#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
+#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
+#         @log_files = @client.query("SELECT Id, logintime, userid FROM LoginHistory where (hour_in_day(convertTimezone(logintime)) > 21 or hour_in_day(convertTimezone(logintime)) < 8")
       end
     rescue Databasedotcom::SalesForceError => e
       # Session has expired. Force user logout.
@@ -60,48 +68,6 @@ class EventLogFilesController < ApplicationController
   end
 
   def show
-    begin
-      @elf_info = @client.find("EventLogFile", params[:id])
-    rescue Databasedotcom::SalesForceError => e
-      if e.message == "Session expired or invalid"
-        redirect_to logout_path
-        return
-      elsif e.message.start_with?("Provided external ID field does not exist or is not accessible")
-        @error_message = "Event log file with ID #{params[:id]} does not exist or is not accessible"
-        render 'event_log_files/error', status: :not_found
-        return
-      else
-        raise e
-      end
-    end
-
-    if (params[:script])
-      @log_files = [@elf_info]
-      # @shell_escaped_token = Shellwords.escape(@token)
-      response.headers["Content-Disposition"] = "attachment; filename=#{@elf_info.LogDate.to_date}_#{@elf_info.EventType}.sh"
-      render 'event_log_files/download_script.sh.erb', layout: false, content_type: 'text/plain'
-    else
-      if @elf_info.LogFileLength > Rails.configuration.x.elf.max_download_file_size_in_bytes
-        render 'event_log_files/large_file', status: :bad_request
-        return
-      else
-        # Stream the file download
-        response.headers['Content-Type'] = 'text/csv'
-        response.headers['Content-Disposition'] = "attachment; filename=\"#{@elf_info.LogDate.to_date}_#{@elf_info.EventType}.csv\""
-
-        begin
-          @client.http_streaming_get(@elf_info.LogFile, response.stream)
-        rescue Databasedotcom::SalesForceError => e
-          response.headers.delete('Content-Type')
-          response.headers.delete('Content-Disposition')
-          @error_message = e.message
-          render 'event_log_files/error', status: :bad_request
-        else
-          response.stream.close
-        end
-        return
-      end
-    end
   end
 
   private
@@ -123,7 +89,7 @@ class EventLogFilesController < ApplicationController
   end
 
   def default_params_redirect
-    redirect_to event_log_files_path(daterange: "#{default_date.to_s} to #{default_date.to_s}", eventtype: ALL_EVENTS_TYPE)
+    redirect_to event_log_files_path(daterange: "#{default_date.to_s} to #{default_date.to_s}", eventtype: ALL_EVENTS_TYPE, startTime: "8", endTime: "21")
   end
 
   # Helper method to transform date (e.g. 2015-01-01) to time in ISO8601 format (e.g. 2015-01-01T00:00:00.000Z)
