@@ -46,6 +46,8 @@ class EventLogFilesController < ApplicationController
     begin
       @startTime = params[:startTime]
       @endTime = params[:endTime]
+      puts "START = #{params[:startTime]}"
+      puts "END = #{params[:endTime]}"
       if @event_type == ALL_EVENTS_TYPE
 #        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
         @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND HOUR_IN_DAY(LogDate) < #{@startTime} AND HOUR_IN_DAY(LogDate) > #{@endTime} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
