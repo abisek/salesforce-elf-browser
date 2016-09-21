@@ -68,48 +68,6 @@ class EventLogFilesController < ApplicationController
   end
 
   def show
-    begin
-      @elf_info = @client.find("LoginHistory", params[:id])
-    rescue Databasedotcom::SalesForceError => e
-      if e.message == "Session expired or invalid"
-        redirect_to logout_path
-        return
-      elsif e.message.start_with?("Provided external ID field does not exist or is not accessible")
-        @error_message = "Event log file with ID #{params[:id]} does not exist or is not accessible"
-        render 'event_log_files/error', status: :not_found
-        return
-      else
-        raise e
-      end
-    end
-
-    if (params[:script])
-      @log_files = [@elf_info]
-      # @shell_escaped_token = Shellwords.escape(@token)
-      response.headers["Content-Disposition"] = "attachment; filename=#{@elf_info.LogDate.to_date}_#{@elf_info.EventType}.sh"
-      render 'event_log_files/download_script.sh.erb', layout: false, content_type: 'text/plain'
-    else
-      if @elf_info.LogFileLength > Rails.configuration.x.elf.max_download_file_size_in_bytes
-        render 'event_log_files/large_file', status: :bad_request
-        return
-      else
-        # Stream the file download
-        response.headers['Content-Type'] = 'text/csv'
-        response.headers['Content-Disposition'] = "attachment; filename=\"#{@elf_info.LogDate.to_date}_#{@elf_info.EventType}.csv\""
-
-        begin
-          @client.http_streaming_get(@elf_info.LogFile, response.stream)
-        rescue Databasedotcom::SalesForceError => e
-          response.headers.delete('Content-Type')
-          response.headers.delete('Content-Disposition')
-          @error_message = e.message
-          render 'event_log_files/error', status: :bad_request
-        else
-          response.stream.close
-        end
-        return
-      end
-    end
   end
 
   private
