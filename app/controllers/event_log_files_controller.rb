@@ -45,8 +45,10 @@ class EventLogFilesController < ApplicationController
 
     begin
       if @event_type == ALL_EVENTS_TYPE
-        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
+#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
+        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND HOUR_IN_DAY(LogDate) < #{@startTime} AND HOUR_IN_DAY(LogDate) > #{@endTime} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
       else
+#        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
         @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
       end
     rescue Databasedotcom::SalesForceError => e
