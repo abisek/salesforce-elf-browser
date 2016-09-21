@@ -40,9 +40,6 @@ gem 'puma'
 gem 'omniauth-salesforce'
 gem 'databasedotcom'
 
-gem 'rails_12factor'
-gem 'rails_stdout_logging'
-
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
 
@@ -59,3 +56,4 @@ group :development, :test do
   gem 'rspec-rails', '~> 3.0'
 end
 
+gem 'rails_12factor', group: :production
