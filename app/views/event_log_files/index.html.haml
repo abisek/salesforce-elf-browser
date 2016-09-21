@@ -40,13 +40,3 @@
       separator: ' to '
     });
   });
-
-- flash.each do |type, value|
-  - if type == "warnings" && !value.nil? && !value.empty?
-    .alert.alert-warning.alert-dismissible.fade.in{:role => "alert"}
-      %button.close{"data-dismiss" => "alert", :type => "button"}
-        %span ×
-      %ul
-      - value.each do |error_message|
-        %li
-          = error_message
