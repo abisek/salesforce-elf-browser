@@ -2,17 +2,17 @@ class EventLogFilesController < ApplicationController
   include ActionController::Live
 
   ALL_EVENTS_TYPE = "All"
-  
+
   before_filter :setup_databasedotcom_client
 
   def index
     redirect_to root_path unless logged_in?
 
     @username = session[:username]
-    if not session.has_key?("event_types")
-      session[:event_types] = get_event_types
-    end
+
+    load_and_cache_elf_metadata unless metadata_cached?
     @event_types = session["event_types"]
+    @has_one_hr_elf = session["has_one_hr_elf"]
 
     if params[:daterange].nil? && params[:eventtype].nil?
       default_params_redirect
@@ -44,10 +44,21 @@ class EventLogFilesController < ApplicationController
     end
 
     begin
+      select_clause = if @has_one_hr_elf
+                        'SELECT Id, EventType, LogDate, LogFileLength, Sequence, Interval'
+                      else
+                        'SELECT Id, EventType, LogDate, LogFileLength'
+                      end
+
+      order_by_clause = if @has_one_hr_elf
+                          'ORDER BY LogDate DESC, EventType, Sequence, Interval'
+                        else
+                          'ORDER BY LogDate DESC, EventType'
+                        end
       if @event_type == ALL_EVENTS_TYPE
-        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} ORDER BY LogDate DESC, EventType")
+        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} #{order_by_clause}")
       else
-        @log_files = @client.query("SELECT Id, EventType, LogDate, LogFileLength FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' ORDER BY LogDate DESC, EventType" )
+        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' #{order_by_clause}")
       end
     rescue Databasedotcom::SalesForceError => e
       # Session has expired. Force user logout.
@@ -132,16 +143,34 @@ class EventLogFilesController < ApplicationController
   end
 
   # helper method to dynamically generate the valid event log file event types
-  def get_event_types
+  def get_event_types(fields)
     pick_list_values = []
-    fields = @client.describe_sobject("EventLogFile")["fields"]
     for field in fields
       if field["name"] == "EventType"
-         field["picklistValues"].each {|v| pick_list_values.push(v["value"])}
+        field["picklistValues"].each {|v| pick_list_values.push(v["value"])}
         break
       end
     end
     return pick_list_values.dup.unshift(ALL_EVENTS_TYPE)
   end
 
+  # helper method to identify whether an org has 1-hr ELF
+  def one_hour_elf?(fields)
+    fields.each do |field|
+      if field["name"] == "Sequence"
+        return true
+      end
+    end
+    return false
+  end
+
+  def metadata_cached?
+    session[:event_types] && session[:has_one_hr_elf]
+  end
+
+  def load_and_cache_elf_metadata
+    fields = @client.describe_sobject("EventLogFile")["fields"]
+    session[:event_types] = get_event_types(fields)
+    session[:has_one_hr_elf] = one_hour_elf?(fields)
+  end
 end

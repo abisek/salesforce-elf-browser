@@ -54,7 +54,12 @@
         %th Action
         %th Event Type
         %th Log Date
+        - if @has_one_hr_elf
+          %th Log Hour
         %th Log Size (in bytes)
+        - if @has_one_hr_elf
+          %th Sequence
+          %th Interval
 
     %tbody
       - @log_files.each do |log_file|
@@ -73,5 +78,13 @@
             = log_file.EventType
           %td
             = log_file.LogDate.strftime("%Y-%m-%d")
+          - if @has_one_hr_elf
+            %td
+              = log_file.LogDate.strftime("%H")
           %td.text-right
             = number_with_delimiter(log_file.LogFileLength)
+          - if @has_one_hr_elf
+            %td
+              = log_file.Sequence
+            %td
+              = log_file.Interval

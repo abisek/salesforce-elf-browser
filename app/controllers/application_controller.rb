@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   include ApplicationHelper
 
-  SALESFORCE_API_VERSION = "32.0"
+  SALESFORCE_API_VERSION = "37.0"
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
