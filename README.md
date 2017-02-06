@@ -28,7 +28,7 @@ This step can be performed from any Salesforce organization.
 7. Repeat steps 1-6 for sandbox instance with a slight change in step 3 -- replace `.../auth/salesforce/callback` with `.../auth/salesforcesandbox/callback`
 8. Note your consumer key and secret and for both production and sandbox instances.
 
-#### Configure and start Rails
+#### Configure and start Rails or Docker
 Configure the following environment variables.
 
 1. `SALESFORCE_ELF_CONSUMER_KEY`: (required) Salesforce consumer key for production from previous section.
@@ -39,7 +39,9 @@ Configure the following environment variables.
 6. `ELF_MAX_DOWNLOAD_FILE_SIZE_IN_BYTES`: (optional) The maximum size of file allowed via streaming download. Default is 5_000_000 (~5MB).
 7. `ELF_GOOGLE_ANALYTICS_TRACKING_ID`: (optional) For Google Analytics tracking.
 
-Once the environment variables are setup, you can start the application using `rails server` or `foreman start`.
+If using Rails, once the environment variables are setup, you can start the application using `rails server` or `foreman start`.
+
+If using Docker, the environment variables can be added to a `.env` file or passed through to the container and started with `docker-compose up`
 
 ## Issues
 Report bugs and issues [here](https://github.com/abisek/salesforce-elf-browser/issues).

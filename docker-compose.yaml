@@ -1,0 +1,19 @@
+version: '2'
+services:
+  main:
+    build: .
+    container_name: salesforce_elf
+    ports:
+      - 8080:8080
+    environment:
+      # Set the following secrets in a .env file
+      SALESFORCE_ELF_CONSUMER_KEY: ${SALESFORCE_ELF_CONSUMER_KEY}
+      SALESFORCE_ELF_CONSUMER_SECRET: ${SALESFORCE_ELF_CONSUMER_SECRET}
+      SALESFORCE_ELF_SANDBOX_CONSUMER_KEY: ${SALESFORCE_ELF_SANDBOX_CONSUMER_KEY}
+      SALESFORCE_ELF_SANDBOX_CONSUMER_SECRET: ${SALESFORCE_ELF_SANDBOX_CONSUMER_SECRET}
+      SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+      # Optional values that aren't so secret
+      # ELF_MAX_DOWNLOAD_FILE_SIZE_IN_BYTES: 5_000_000
+      # ELF_GOOGLE_ANALYTICS_TRACKING_ID: foo
+      # Set run environment (note: production requires ssl)
+      # RACK_ENV: production
