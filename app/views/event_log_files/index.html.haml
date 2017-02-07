@@ -6,6 +6,16 @@
       %input#daterange.form-control{type: "text", size: 24, name: 'daterange', value: "#{@start_date} to #{@end_date}"}
 
     .form-group
+      %label{for: 'starttime'}
+        Start Time
+      %input#starttime.form-control{type: "text", size: 24, name: 'starttime', value: "8"}
+
+    .form-group
+      %label{for: 'endtime'}
+        End Time
+      %input#endtime.form-control{type: "text", size: 24, name: 'endtime', value: "21"}
+
+    .form-group
       %label
         Event Type
       = select_tag('eventtype', options_for_select(@event_types, @event_type), class: 'form-control')
