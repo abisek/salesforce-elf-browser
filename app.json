@@ -15,11 +15,11 @@
     },
     "SALESFORCE_ELF_SANDBOX_CONSUMER_KEY": {
       "description": "Salesforce consumer key for sandbox",
-      "required": true
+      "required": false
     },
     "SALESFORCE_ELF_SANDBOX_CONSUMER_SECRET": {
       "description": "Salesforce consumer secret for sandbox",
-      "required": true
+      "required": false
     },
     "SECRET_KEY_BASE": {
       "description": "A secret key for verifying the integrity of signed cookies",
