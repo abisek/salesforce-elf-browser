@@ -23,7 +23,7 @@
     },
     "SECRET_KEY_BASE": {
       "description": "A secret key for verifying the integrity of signed cookies",
-      "required": false,
+      "required": true,
       "generator": "secret"
     },
     "ELF_MAX_DOWNLOAD_FILE_SIZE_IN_BYTES": {
