@@ -54,11 +54,17 @@ class EventLogFilesController < ApplicationController
                           'ORDER BY LogDate DESC, EventType, Sequence, Interval'
                         else
                           'ORDER BY LogDate DESC, EventType'
-                        end
+                        end      
+
+      where_clause_addition = if @has_one_hr_elf
+                                "AND (Interval = 'Hourly' OR Interval = 'Daily') "
+                              else
+                                ""
+                              end
       if @event_type == ALL_EVENTS_TYPE
-        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} #{order_by_clause}")
+        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} #{where_clause_addition}#{order_by_clause}")
       else
-        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' #{order_by_clause}")
+        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' #{where_clause_addition}#{order_by_clause}")
       end
     rescue Databasedotcom::SalesForceError => e
       # Session has expired. Force user logout.
