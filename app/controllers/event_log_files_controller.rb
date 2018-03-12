@@ -28,6 +28,12 @@ class EventLogFilesController < ApplicationController
     end
 
     @event_type = @event_types.find { |event_type| event_type.downcase == params[:eventtype].downcase }
+    
+    if params[:interval].nil?
+      @interval = "all"
+    else
+      @interval = params[:interval]
+    end
 
     if @event_type.nil?
       flash_message(:warnings, "The 'eventtype' query parameter with value '#{params[:eventtype]}' is invalid. Displaying all event types.")
@@ -57,14 +63,21 @@ class EventLogFilesController < ApplicationController
                         end      
 
       where_clause_addition = if @has_one_hr_elf
-                                "AND (Interval = 'Hourly' OR Interval = 'Daily') "
+                                case @interval
+                                when "daily"
+                                  "AND Interval = 'Daily' "
+                                when "hourly"
+                                  "AND Interval = 'Hourly' "
+                                else
+                                  "AND (Interval = 'Hourly' OR Interval = 'Daily') "
+                                end
                               else
                                 ""
                               end
       if @event_type == ALL_EVENTS_TYPE
-        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} #{where_clause_addition}#{order_by_clause}")
+        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate < #{date_to_time(@end_date + 1)} #{where_clause_addition}#{order_by_clause}")
       else
-        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate <= #{date_to_time(@end_date)} AND EventType = '#{@event_type}' #{where_clause_addition}#{order_by_clause}")
+        @log_files = @client.query("#{select_clause} FROM EventLogFile WHERE LogDate >= #{date_to_time(@start_date)} AND LogDate < #{date_to_time(@end_date + 1)} AND EventType = '#{@event_type}' #{where_clause_addition}#{order_by_clause}")
       end
     rescue Databasedotcom::SalesForceError => e
       # Session has expired. Force user logout.
