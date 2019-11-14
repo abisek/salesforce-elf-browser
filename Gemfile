@@ -15,7 +15,7 @@ gem 'coffee-rails', '~> 4.1.0'
 gem 'haml-rails', '~> 0.9'
 
 # UI related
-gem 'bootstrap-sass', '~> 3.3.4'
+gem 'bootstrap-sass', '~> 3.4.1'
 gem 'momentjs-rails'
 gem 'bootstrap-daterangepicker-rails'
 
