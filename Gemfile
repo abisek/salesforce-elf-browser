@@ -33,7 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'bcrypt', '~> 3.1.7'
 
 # Use Puma as the app server
-gem 'puma', '3.11.3'
+gem 'puma', '3.12.3'
 
 # 3rd Party Services
 gem 'omniauth-salesforce'

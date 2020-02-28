@@ -125,7 +125,7 @@ GEM
     omniauth-salesforce (1.0.5)
       omniauth (~> 1.0)
       omniauth-oauth2 (~> 1.0)
-    puma (3.11.3)
+    puma (3.12.3)
     rack (1.6.0)
     rack-test (0.6.3)
       rack (>= 1.0)
@@ -226,7 +226,7 @@ DEPENDENCIES
   jquery-rails
   momentjs-rails
   omniauth-salesforce
-  puma (= 3.11.3)
+  puma (= 3.12.3)
   rails (= 4.2.0)
   rspec-rails (~> 3.0)
   sass-rails (~> 5.0)
