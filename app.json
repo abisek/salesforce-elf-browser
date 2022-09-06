@@ -3,7 +3,8 @@
   "description": "A Salesforce connected web app to access and download Event Log Files ",
   "repository": "https://github.com/abisek/salesforce-elf-browser",
   "keywords": ["salesforce", "sfdc", "elf", "event log file", "download", "script"],
-
+  "stack": "heroku-20",
+  
   "env": {
     "SALESFORCE_ELF_CONSUMER_KEY": {
       "description": "Salesforce consumer key for production",
