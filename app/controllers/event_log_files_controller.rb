@@ -3,7 +3,7 @@ class EventLogFilesController < ApplicationController
 
   ALL_EVENTS_TYPE = "All"
 
-  before_filter :setup_databasedotcom_client
+  before_action :setup_databasedotcom_client
 
   def index
     redirect_to root_path unless logged_in?
