@@ -138,7 +138,7 @@ class EventLogFilesController < ApplicationController
   # return [start_date, end_date] from a query string (e.g. "2015-01-01 to 2015-01-02"). Returned dates are of Date class.
   def date_range_parser(query_string)
     begin
-      start_date, end_date = query_string.split("-").map { |date_str| date_str.strip! }.map { |date_str| Date.parse(date_str) }
+      start_date, end_date = query_string.split("to").map { |date_str| date_str.strip! }. map { |date_str| Date.parse(date_str) }
     rescue
       raise ArgumentError, "unable to parse date"
     end
@@ -153,7 +153,7 @@ class EventLogFilesController < ApplicationController
   end
 
   def default_params_redirect
-    redirect_to event_log_files_path(daterange: "#{default_date.to_s} - #{default_date.to_s}", eventtype: ALL_EVENTS_TYPE)
+    redirect_to event_log_files_path(daterange: "#{default_date.to_s} to #{default_date.to_s}", eventtype: ALL_EVENTS_TYPE)
   end
 
   # Helper method to transform date (e.g. 2015-01-01) to time in ISO8601 format (e.g. 2015-01-01T00:00:00.000Z)
