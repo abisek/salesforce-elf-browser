@@ -24,7 +24,6 @@
 :javascript
   $(document).ready(function() {
     $('#daterange').daterangepicker({
-      format: 'YYYY-MM-DD',
       startDate: moment("#{@start_date}"),
       endDate: moment("#{@end_date}"),
       ranges: {
@@ -35,6 +34,7 @@
          'This Month': [moment().startOf('month'), moment().endOf('month')]
         },
       locale: {  
+        format: 'YYYY-MM-DD',
         separator: ' to '
       }
     });
