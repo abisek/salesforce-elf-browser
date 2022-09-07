@@ -7,5 +7,5 @@
 # Event Type: <%= log_file.EventType%>
 # Log Date: <%= log_file.LogDate.to_date%>
 # File Size (in Bytes): <%= number_with_delimiter(log_file.LogFileLength) %>
-curl --compressed "<%= @instance_url %>/services/data/v32.0/sobjects/EventLogFile/<%= log_file.Id%>/LogFile" -H "Authorization: Bearer <%= @token %>" -o "<%= log_file.LogDate.to_date%>_<%= log_file.EventType%>.csv"
+curl --compressed "<%= @instance_url %>/services/data/v56.0/sobjects/EventLogFile/<%= log_file.Id%>/LogFile" -H "Authorization: Bearer <%= @token %>" -o "<%= log_file.LogDate.to_date%>_<%= log_file.EventType%>.csv"
 <% end %>
