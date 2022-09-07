@@ -34,7 +34,9 @@
          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
          'This Month': [moment().startOf('month'), moment().endOf('month')]
         },
-      separator: ' to '
+      locale: {  
+        separator: ' to '
+      }
     });
   });
 
