@@ -24,7 +24,6 @@
 :javascript
   $(document).ready(function() {
     $('#daterange').daterangepicker({
-      format: 'YYYY-MM-DD',
       startDate: moment("#{@start_date}"),
       endDate: moment("#{@end_date}"),
       ranges: {
@@ -34,7 +33,10 @@
          'Last 30 Days': [moment().subtract(29, 'days'), moment()],
          'This Month': [moment().startOf('month'), moment().endOf('month')]
         },
-      separator: ' to '
+      locale: {  
+        format: 'YYYY-MM-DD',
+        separator: ' to '
+      }
     });
   });
 
@@ -75,13 +77,13 @@
             = log_file.Id
           %td.text-center
             -if log_file.LogFileLength <= Rails.configuration.x.elf.max_download_file_size_in_bytes
-              = link_to(event_log_file_path(log_file.Id), "data-toggle" => "tooltip", title: "Direct download event log file", class: "btn btn-success btn-xs", onClick: "ga('send', 'event', { eventCategory: 'file', eventAction: 'download', eventLabel: '#{log_file.EventType}'});") do
+              = link_to(event_log_file_path(log_file.Id), "data-toggle" => "tooltip", title: "Direct download event log file", class: "btn btn-success btn-xs", onClick: "ga('send', 'event', { eventCategory: 'file', eventAction: 'download', eventLabel: '#{log_file.EventType}'});", target: "_blank") do
                 %span.glyphicon.glyphicon-download-alt
             - else
-              = link_to(event_log_file_path(log_file.Id), "data-toggle" => "tooltip", title: "Files over #{number_with_delimiter(Rails.configuration.x.elf.max_download_file_size_in_bytes)} bytes cannot be downloaded from ELF Browser. Try cURL download shell script instead.", class: "btn btn-default btn-xs disabled") do
+              = link_to(event_log_file_path(log_file.Id), "data-toggle" => "tooltip", title: "Files over #{number_with_delimiter(Rails.configuration.x.elf.max_download_file_size_in_bytes)} bytes cannot be downloaded from ELF Browser. Try cURL download shell script instead.", class: "btn btn-default btn-xs disabled", target: "_blank") do
                 %span.glyphicon.glyphicon-download-alt
             &nbsp;
-            = link_to(event_log_file_path(log_file.Id, script: 1), "data-toggle" => "tooltip", title: "Download event log file with cURL shell script", class: "btn btn-info btn-xs", onClick: "ga('send', 'event', { eventCategory: 'script', eventAction: 'download', eventLabel: '#{log_file.EventType}'});") do
+            = link_to(event_log_file_path(log_file.Id, script: 1), "data-toggle" => "tooltip", title: "Download event log file with cURL shell script", class: "btn btn-info btn-xs", onClick: "ga('send', 'event', { eventCategory: 'script', eventAction: 'download', eventLabel: '#{log_file.EventType}'});", target: "_blank") do
               %span.glyphicon.glyphicon-file
           %td
             = log_file.EventType

@@ -1,7 +1,7 @@
 !!!
 %html
   %head
-    %title Salesforce Event Log File Browser
+    %title Event Log File Browser for Salesforce
     = stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track' => true
     = javascript_include_tag 'application', 'data-turbolinks-track' => true
     = csrf_meta_tags
@@ -16,7 +16,7 @@
             %span.icon-bar
           = link_to(root_path, class: "navbar-brand") do
             %span
-            Salesforce Event Log File Browser
+            Event Log File Browser for Salesforce
         .collapse.navbar-collapse
           - if logged_in?
             .nav.navbar-nav.navbar-right
@@ -44,4 +44,6 @@
           |
           Provided under
           = link_to("MIT license.", "https://github.com/abisek/salesforce-elf-browser/blob/master/MIT-LICENSE")
-          Copyright (c) 2015 Salesforce ELF Browser contributors.
+          Copyright (c) 2022 Salesforce ELF Browser contributors. 
+
+          Safe harbor: the Salesforce ELF browser is not an official Salesforce product we make no guarantees on the safety, security, or maintenance of the project or the deployed app and customers should not base their purchasing decision on the current feature set or future roadmap of this application.
